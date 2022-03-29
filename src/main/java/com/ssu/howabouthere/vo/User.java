@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class User {
     @NonNull
-    private String id;
+    private String userId;
     // pbdkf2를 사용하여 암호화
     @NonNull
     private String password;
