@@ -28,7 +28,7 @@ class UserControllerTest {
 
     private HttpServletRequest request;
 
-    private User givenUser = new User("admin", "1234", LocalDateTime.now(), "park",
+    private User givenUser = new User(1L, "admin", "1234", LocalDateTime.now(), "park",
             "서울특별시", "admin@ssu.ac.kr");
 
     @BeforeEach
@@ -40,12 +40,9 @@ class UserControllerTest {
     @Test
     void 로그인하기() {
         // given
-        Map<String, Object> loginInfo = new HashMap<>();
-        loginInfo.put("id", "admin");
-        loginInfo.put("password", "1234");
 
         // when
-        userController.login(loginInfo, request);
+        userController.login(givenUser, request);
         lenient().when(userService.login("admin", "1234")).thenReturn(true);
 
         // then

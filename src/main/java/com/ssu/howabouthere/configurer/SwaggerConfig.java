@@ -2,7 +2,6 @@ package com.ssu.howabouthere.configurer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
-@EnableWebMvc
 public class SwaggerConfig {
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("요기어때").description("HowAboutHere API DOCS").build();

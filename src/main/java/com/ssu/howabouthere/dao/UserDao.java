@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.nio.charset.StandardCharsets;
-
 @Repository("userDao")
 public class UserDao {
     private UserMapper userMapper;
@@ -29,15 +27,10 @@ public class UserDao {
         return userMapper.selectMember(userId);
     }
 
-    public boolean login(String id, String password) {
-        String encodedPassword = passwordEncoder.encode(password);
-        int countMemberMatches = userMapper.countMemberMatches(id, encodedPassword);
+    public boolean login(String userId, String password) {
+        User loginUser = userMapper.selectMember(userId);
 
-        if(countMemberMatches == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return passwordEncoder.matches(password, loginUser.getPassword());
     }
 
 

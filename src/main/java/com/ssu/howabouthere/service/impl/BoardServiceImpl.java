@@ -23,7 +23,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getUploadedArticle(int boardId, String userId) {
-        return null;
+    public Board getUploadedArticle(Long boardId, String userId) {
+        return boardDao.getUploadedArticle(boardId, userId);
+    }
+
+    @Override
+    public List<Board> getAllUploadedArticles(String userId) {
+        return boardDao.getAllUploadedArticles(userId);
     }
 }

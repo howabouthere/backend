@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface BoardService {
     void uploadArticle(Board board);
-    List<Board> getUploadedArticle(int boardId, String userId);
+    Board getUploadedArticle(Long boardId, String userId);
+    List<Board> getAllUploadedArticles(String userId);
 }
