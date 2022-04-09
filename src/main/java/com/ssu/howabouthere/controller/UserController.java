@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,15 +28,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "login", notes = "로그인하기")
+    @ApiOperation(value = "login.do", notes = "로그인하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ok"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @RequestMapping("/login.do")
-    public @ResponseBody Map<String, Object> login(@RequestBody Map<String, Object> loginInfo, HttpServletRequest request) {
-        String userId = (String)loginInfo.get("id");
-        String password = (String)loginInfo.get("password");
+    @PostMapping("/login.do")
+    public @ResponseBody Map<String, Object> login(@RequestBody @Valid User loginInfo, HttpServletRequest request) {
+        String userId = loginInfo.getUserId();
+        String password = loginInfo.getPassword();
         Map<String, Object> resultMap = new HashMap<>();
 
         boolean isMatched = userService.login(userId, password);
@@ -50,12 +51,12 @@ public class UserController {
         return resultMap;
     }
 
-    @ApiOperation(value = "register", notes = "회원가입하기")
+    @ApiOperation(value = "register.do", notes = "회원가입하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ok"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @RequestMapping("/register.do")
+    @PostMapping("/register.do")
     public void register(@RequestBody @Valid User user, HttpServletRequest request) {
         userService.register(user);
     }

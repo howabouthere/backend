@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -15,6 +17,7 @@ public class Chat {
         ENTER, SEND, RECEIVE
     }
 
+    private @Id @GeneratedValue Long id;
     private MessageType type;
     private String text;
     private String senderId;

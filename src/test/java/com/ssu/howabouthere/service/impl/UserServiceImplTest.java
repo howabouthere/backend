@@ -24,7 +24,7 @@ class UserServiceImplTest {
 
     private UserService userService;
 
-    private User givenUser = new User("admin", "1234", LocalDateTime.now(), "park", "서울특별시", "admin@ssu.ac.kr");
+    private User givenUser = new User(1L, "admin", "1234", LocalDateTime.now(), "park", "서울특별시", "admin@ssu.ac.kr");
 
     @BeforeEach
     void mock_주입() {

@@ -6,12 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class User {
+    private @Id @GeneratedValue Long id;
     @NonNull
     private String userId;
     // pbdkf2를 사용하여 암호화
