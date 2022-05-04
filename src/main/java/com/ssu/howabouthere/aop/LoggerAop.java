@@ -1,5 +1,6 @@
 package com.ssu.howabouthere.aop;
 
+import com.ssu.howabouthere.vo.Board;
 import com.ssu.howabouthere.vo.User;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -23,11 +24,8 @@ public class LoggerAop {
     @Pointcut(value = "execution(* com.ssu.howabouthere.controller.UserController.register(..)) && args(user, request)", argNames = "user,request")
     private void registerExecution(User user, HttpServletRequest request) {}
 
-    @AfterThrowing(value = "execution(* com.ssu.howabouthere.controller.*Controller.*(..))", throwing = "exception")
-    public void controllerLoggerAdvice(JoinPoint joinPoint, Exception exception) {
-        String errorMsg = joinPoint.getSignature().getName() + " class has an error.";
-        logger.error(errorMsg, exception);
-    }
+    @Pointcut(value = "execution(* com.ssu.howabouthere.controller.BoardController.*(..)) && args(board, request)", argNames = "board, request")
+    private void boardExecution(Board board, HttpServletRequest request) {}
 
     @Before(value = "loginExecution(loginUser, request)", argNames = "jp,loginUser,request")
     public void loginAroundAdvisor(JoinPoint jp, User loginUser, HttpServletRequest request) {
@@ -37,5 +35,11 @@ public class LoggerAop {
     @Before(value = "registerExecution(registerUser, request)", argNames = "jp,registerUser,request")
     public void registerAroundAdvisor(JoinPoint jp, User registerUser, HttpServletRequest request) {
         logger.info("register user info: " + registerUser.toString());
+    }
+
+    @Before(value = "boardExecution(board, request)", argNames = "jp,board,request")
+    public void uploadArticleAroundAdvisor(JoinPoint jp, Board board, HttpServletRequest request) {
+        logger.info("in method: " + jp.getSignature().getName());
+        logger.info("board article info: " + board.toString());
     }
 }

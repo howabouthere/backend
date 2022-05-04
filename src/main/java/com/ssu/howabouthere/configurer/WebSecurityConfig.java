@@ -59,7 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return firewall;
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoder = new HashMap<>();
