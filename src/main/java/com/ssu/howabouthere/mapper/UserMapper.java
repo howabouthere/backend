@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository("userMapper")
 public interface UserMapper {
     void insertUser(User user);
-    User selectMember(String userId);
-    int countMemberMatches(String userId, String password);
+    User selectMemberByEmail(String email);
+    int countMemberMatches(String email, String password);
 }

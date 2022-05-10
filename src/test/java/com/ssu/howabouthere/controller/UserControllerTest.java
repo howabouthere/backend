@@ -28,15 +28,13 @@ class UserControllerTest {
 
     private HttpServletRequest request;
 
-    private User givenUser = new User(1L, "admin", "1234", LocalDateTime.now(), "park",
-            "서울특별시", "admin@ssu.ac.kr");
+    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr");
 
     @BeforeEach
     void mock_init() {
         request = Mockito.mock(HttpServletRequest.class);
         userController = new UserController(userService);
     }
-
     @Test
     void 로그인하기() {
         // given
@@ -56,12 +54,12 @@ class UserControllerTest {
 
         // when
         userController.register(givenUser, request);
-        when(userService.getMemberInfoById(givenUser.getUserId())).thenReturn(givenUser);
+        when(userService.getMemberInfoByEmail(givenUser.getEmail())).thenReturn(givenUser);
 
         // then
-        assertEquals("admin", userService.getMemberInfoById(givenUser.getUserId()).getUserId());
+        assertEquals("admin", userService.getMemberInfoByEmail(givenUser.getEmail()).getName());
         verify(userService, times(1)).register(givenUser);
-        verify(userService, times(1)).getMemberInfoById(givenUser.getUserId());
+        verify(userService, times(1)).getMemberInfoByEmail(givenUser.getEmail());
         verifyNoMoreInteractions(userService);
     }
 }

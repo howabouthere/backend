@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
     private UserService userService;
 
@@ -28,22 +28,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "login.do", notes = "로그인하기")
+    @ApiOperation(value = "login", notes = "로그인하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ok"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/login.do")
+    @PostMapping("/login")
     public @ResponseBody Map<String, Object> login(@RequestBody @Valid User loginInfo, HttpServletRequest request) {
-        String userId = loginInfo.getUserId();
+        String email = loginInfo.getEmail();
         String password = loginInfo.getPassword();
         Map<String, Object> resultMap = new HashMap<>();
 
-        boolean isMatched = userService.login(userId, password);
-        resultMap.put("isLoginOK", isMatched);
+        boolean isMatched = userService.login(email, password);
+        resultMap.put("loginSuccess", isMatched);
 
         if(isMatched) {
-            User loginMember = userService.getMemberInfoById(userId);
+            User loginMember = userService.getMemberInfoByEmail(email);
             HttpSession session = request.getSession();
             session.setAttribute("loginMember", loginMember);
         }
@@ -51,13 +51,16 @@ public class UserController {
         return resultMap;
     }
 
-    @ApiOperation(value = "register.do", notes = "회원가입하기")
+    @ApiOperation(value = "register", notes = "회원가입하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "ok"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/register.do")
-    public void register(@RequestBody @Valid User user, HttpServletRequest request) {
+    @PostMapping("/register")
+    public @ResponseBody Map<String, Object> register(@RequestBody @Valid User user, HttpServletRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
         userService.register(user);
+        resultMap.put("success", true);
+        return resultMap;
     }
 }

@@ -24,7 +24,7 @@ class UserServiceImplTest {
 
     private UserService userService;
 
-    private User givenUser = new User(1L, "admin", "1234", LocalDateTime.now(), "park", "서울특별시", "admin@ssu.ac.kr");
+    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr");
 
     @BeforeEach
     void mock_주입() {
@@ -37,11 +37,11 @@ class UserServiceImplTest {
 
         // when
         userService.register(givenUser);
-        when(userDao.getMemberInfoById("admin")).thenReturn(givenUser);
+        when(userDao.getMemberInfoByEmail("admin@ssu.ac.kr")).thenReturn(givenUser);
 
         // then
-        assertEquals(userService.getMemberInfoById("admin"), givenUser);
-        verify(userDao, times(1)).getMemberInfoById("admin");
+        assertEquals(userService.getMemberInfoByEmail("admin@ssu.ac.kr"), givenUser);
+        verify(userDao, times(1)).getMemberInfoByEmail("admin@ssu.ac.kr");
         verify(userDao, times(1)).register(givenUser);
         verifyNoMoreInteractions(userDao);
     }
@@ -49,16 +49,16 @@ class UserServiceImplTest {
     @Test
     void 로그인() {
         // given
-        String id = "admin";
+        String email = "admin@ssu.ac.kr";
         String password = "1234";
 
         // when
-        userService.login(id, password);
-        when(userDao.login(id, password)).thenReturn(true);
+        userService.login(email, password);
+        when(userDao.login(email, password)).thenReturn(true);
 
         // then
-        assertTrue(userService.login(id, password));
-        verify(userDao, times(2)).login(id, password);
+        assertTrue(userService.login(email, password));
+        verify(userDao, times(2)).login(email, password);
         verifyNoMoreInteractions(userDao);
     }
 }

@@ -23,7 +23,7 @@ public class Board {
     private String text;
     @NonNull
     @Size(max = 20)
-    private String userId;
+    private String userName;
     @NonNull
     private Double longitude;
     @NonNull

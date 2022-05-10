@@ -9,13 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/chat")
 public class ChatController {
 
-    @MessageMapping("/send")
+    @MessageMapping(".register")
+    @SendTo("")
+    public void register() {
+
+    }
+
+    @MessageMapping(".send")
     @SendTo("")
     public void send() {
 
     }
 
-    @MessageMapping("/receive")
+    @MessageMapping(".receive")
     @SendTo()
     public void receive() {
 

@@ -65,6 +65,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getArticlesByUserId(Board board) {
-        return boardDao.getArticlesByUserId(board.getUserId());
+        return boardDao.getArticlesByUserId(board.getUserName());
     }
 }
