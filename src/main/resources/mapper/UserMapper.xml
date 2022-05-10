@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssu.howabouthere.mapper.UserMapper">
     <insert id="insertUser" parameterType="com.ssu.howabouthere.vo.User">
-        INSERT INTO USER(userId, password, registeredDate, username, address, email)
-        values(#{userId}, #{password}, #{registeredDate}, #{username}, #{address}, #{email})
+        INSERT INTO USER(password, registeredDate, name, email)
+        values(#{password}, #{registeredDate}, #{name}, #{email})
     </insert>
-    <select id="selectMember" parameterType="java.lang.String" resultType="com.ssu.howabouthere.vo.User">
-        SELECT * FROM USER WHERE userId = #{userId}
+    <select id="selectMemberByEmail" parameterType="java.lang.String" resultType="com.ssu.howabouthere.vo.User">
+        SELECT * FROM USER WHERE email = #{email}
     </select>
     <select id="countMemberMatches" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT count(*)
         FROM USER
-        WHERE userId = #{userId} AND password = #{password}
+        WHERE email = #{email} AND password = #{password}
     </select>
 </mapper>

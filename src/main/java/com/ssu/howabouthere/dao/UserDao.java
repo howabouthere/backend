@@ -23,12 +23,12 @@ public class UserDao {
         userMapper.insertUser(user);
     }
 
-    public User getMemberInfoById(String userId) {
-        return userMapper.selectMember(userId);
+    public User getMemberInfoByEmail(String email) {
+        return userMapper.selectMemberByEmail(email);
     }
 
-    public boolean login(String userId, String password) {
-        User loginUser = userMapper.selectMember(userId);
+    public boolean login(String email, String password) {
+        User loginUser = userMapper.selectMemberByEmail(email);
 
         return passwordEncoder.matches(password, loginUser.getPassword());
     }

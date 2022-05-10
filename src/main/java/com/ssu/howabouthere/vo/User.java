@@ -1,9 +1,6 @@
 package com.ssu.howabouthere.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
@@ -13,10 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class User {
     private @Id @GeneratedValue Long id;
-    @NonNull
-    private String userId;
     // pbdkf2를 사용하여 암호화
     @NonNull
     private String password;
@@ -24,9 +20,7 @@ public class User {
     @NonNull
     private LocalDateTime registeredDate;
     @NonNull
-    private String username;
-    @NonNull
-    private String address;
+    private String name;
     @NonNull
     private String email;
 }
