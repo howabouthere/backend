@@ -30,7 +30,9 @@ public class UserDao {
     public boolean login(String email, String password) {
         User loginUser = userMapper.selectMemberByEmail(email);
 
-        return passwordEncoder.matches(password, loginUser.getPassword());
+        if(loginUser != null)
+            return passwordEncoder.matches(password, loginUser.getPassword());
+        else return false;
     }
 
 

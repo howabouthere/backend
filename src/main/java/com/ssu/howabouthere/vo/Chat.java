@@ -8,14 +8,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class Chat {
+public class Chat implements Serializable {
     public enum MessageType {
         ENTER, SEND, RECEIVE, QUIT
     }

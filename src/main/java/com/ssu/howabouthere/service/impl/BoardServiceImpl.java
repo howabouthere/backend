@@ -21,8 +21,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void uploadArticle(Board board) {
+    public Board uploadArticle(Board board) throws Exception {
+        List<String> locationInfo = kakaoMapHelper.getDivisionByAxis(board.getLongitude(), board.getLatitude());
+        board.setRegion_1st_name(locationInfo.get(0));
+        board.setRegion_2nd_name(locationInfo.get(1));
+        board.setRegion_3rd_name(locationInfo.get(2));
+        board.setRegion_4th_name(locationInfo.get(3));
+
         boardDao.uploadArticle(board);
+
+        return board;
     }
 
     @Override
@@ -64,7 +72,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<Board> getArticlesByUserId(Board board) {
-        return boardDao.getArticlesByUserId(board.getUserName());
+    public List<Board> getArticlesByUsername(Board board) {
+        return boardDao.getAllUploadedArticles(board.getUsername());
     }
 }

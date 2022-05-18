@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssu.howabouthere.mapper.BoardMapper">
     <insert id="insertArticle" parameterType="com.ssu.howabouthere.vo.Board">
-        INSERT INTO BOARD(title, text, userId, longitude, latitude,
+        INSERT INTO BOARD(title, text, username, longitude, latitude,
                           region_1st_name, region_2nd_name, region_3rd_name, region_4th_name)
-        VALUES (#{title}, #{text}, #{userId}, #{longitude}, #{latitude},
+        VALUES (#{title}, #{text}, #{username}, #{longitude}, #{latitude},
                 #{region_1st_name}, #{region_2nd_name}, #{region_3rd_name}, #{region_4th_name})
     </insert>
     <delete id="deleteArticle" parameterType="java.lang.Long">
@@ -13,9 +13,9 @@
     <select id="selectAllUploadedArticles" resultType="com.ssu.howabouthere.vo.Board">
         SELECT * FROM BOARD
     </select>
-    <select id="selectAllUploadedArticlesByUserId" parameterType="java.lang.String" resultType="com.ssu.howabouthere.vo.Board">
+    <select id="selectAllUploadedArticlesByUsername" parameterType="java.lang.String" resultType="com.ssu.howabouthere.vo.Board">
         SELECT * FROM BOARD
-        WHERE userId = #{userId}
+        WHERE username = #{username}
     </select>
     <select id="selectUploadedArticle" parameterType="java.lang.Long" resultType="com.ssu.howabouthere.vo.Board">
         SELECT * FROM BOARD
@@ -33,7 +33,7 @@
             region_4th_name = #{region_4th_name}
         WHERE id = #{id}
     </update>
-    <select id="selectAllUploadedArticlesByLocation" parameterType="java.util.Map">
+    <select id="selectAllUploadedArticlesByLocation" parameterType="java.util.Map" resultType="com.ssu.howabouthere.vo.Board">
         SELECT * FROM BOARD
         WHERE REGION_1ST_NAME = #{region_1st_name}
                 AND REGION_2ND_NAME = #{region_2nd_name}

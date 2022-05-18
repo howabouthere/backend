@@ -6,17 +6,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController(value = "boardController")
-@RequestMapping("/board")
+@RequestMapping("/api/board")
 public class BoardController {
     private BoardService boardService;
 
@@ -30,9 +29,17 @@ public class BoardController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/uploadArticle.do")
-    public void uploadArticle(@RequestBody Board board, HttpServletRequest request) {
-        boardService.uploadArticle(board);
+    @PostMapping("/uploadArticle")
+    public @ResponseBody Map<String, Object>
+    uploadArticle(@RequestBody Board board, HttpServletRequest request) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Board resultBoard = boardService.uploadArticle(board);
+
+        resultMap.put("success", true);
+        resultMap.put("board", resultBoard);
+
+        return resultMap;
     }
 
     @ApiOperation(value = "delete", notes = "업로드 확인")
@@ -40,7 +47,7 @@ public class BoardController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/deleteArticle.do")
+    @PostMapping("/deleteArticle")
     public void deleteArticle(@RequestBody Board board, HttpServletRequest request) {
         boardService.deleteArticle(board);
     }
@@ -50,7 +57,7 @@ public class BoardController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/editArticle.do")
+    @PostMapping("/editArticle")
     public void editArticle(@RequestBody Board board, HttpServletRequest request) {
         boardService.editArticle(board);
     }
@@ -60,7 +67,7 @@ public class BoardController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/getAroundLocationArticle.do")
+    @PostMapping("/getAroundLocationArticle")
     public List<Board> getArticlesByLocation(@RequestBody Map<String, Object> axisInfo, HttpServletRequest request) throws Exception {
         return boardService.getAroundLocationArticles(axisInfo);
     }
@@ -70,8 +77,8 @@ public class BoardController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
-    @PostMapping("/getArticlesByUserId.do")
+    @PostMapping("/getArticlesByUserId")
     public List<Board> getArticleByUserId(@RequestBody Board board, HttpServletRequest request) throws Exception {
-        return boardService.getArticlesByUserId(board);
+        return boardService.getArticlesByUsername(board);
     }
 }

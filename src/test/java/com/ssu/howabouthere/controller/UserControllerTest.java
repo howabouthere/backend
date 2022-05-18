@@ -1,5 +1,6 @@
 package com.ssu.howabouthere.controller;
 
+import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.UserService;
 import com.ssu.howabouthere.vo.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,12 +29,15 @@ class UserControllerTest {
 
     private HttpServletRequest request;
 
+    private JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+
     private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr");
 
     @BeforeEach
     void mock_init() {
         request = Mockito.mock(HttpServletRequest.class);
-        userController = new UserController(userService);
+
+        userController = new UserController(userService, jwtTokenProvider);
     }
     @Test
     void 로그인하기() {

@@ -1,6 +1,7 @@
 package com.ssu.howabouthere.service.impl;
 
 import com.ssu.howabouthere.dao.UserDao;
+import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.UserService;
 import com.ssu.howabouthere.vo.User;
 import org.junit.jupiter.api.BeforeEach;

@@ -26,8 +26,8 @@ public class BoardDao {
         return boardMapper.selectUploadedArticle(boardId);
     }
 
-    public List<Board> getAllUploadedArticles(String userId) {
-        return boardMapper.selectAllUploadedArticlesByUserId(userId);
+    public List<Board> getAllUploadedArticles(String username) {
+        return boardMapper.selectAllUploadedArticlesByUsername(username);
     }
 
     public List<Board> getAllUploadedArticles() {
@@ -52,7 +52,7 @@ public class BoardDao {
         return boardMapper.selectAllUploadedArticlesByLocation(locationMap);
     }
 
-    public List<Board> getArticlesByUserId(String userId) {
-        return boardMapper.selectAllUploadedArticlesByUserId(userId);
+    public List<Board> getArticlesByUsername(String username) {
+        return boardMapper.selectAllUploadedArticlesByUsername(username);
     }
 }

@@ -2,10 +2,11 @@ package com.ssu.howabouthere.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
-public class ChatRoom {
+public class ChatRoom implements Serializable {
     private String roomNo;
     private String title;
     private long userCount;

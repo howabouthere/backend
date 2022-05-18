@@ -1,6 +1,7 @@
 package com.ssu.howabouthere.service.impl;
 
 import com.ssu.howabouthere.dao.BoardDao;
+import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.BoardService;
 import com.ssu.howabouthere.vo.Board;
 import com.ssu.howabouthere.vo.User;

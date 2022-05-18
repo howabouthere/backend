@@ -11,7 +11,7 @@ public interface BoardMapper {
     void insertArticle(Board board);
     Board selectUploadedArticle(Long boardId);
     List<Board> selectAllUploadedArticles();
-    List<Board> selectAllUploadedArticlesByUserId(String userId);
+    List<Board> selectAllUploadedArticlesByUsername(String username);
     void deleteArticle(Long boardId);
     void updateArticle(Board board);
     List<Board> selectAllUploadedArticlesByLocation(Map<String, String> locationMap);
