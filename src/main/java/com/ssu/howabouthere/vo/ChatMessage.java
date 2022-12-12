@@ -17,14 +17,13 @@ import java.time.LocalDateTime;
 @Builder
 public class Chat implements Serializable {
     public enum MessageType {
-        ENTER, SEND, RECEIVE, QUIT
+        ENTER, TALK, QUIT
     }
 
     private @Id @GeneratedValue Long id;
     private MessageType type;
     private String text;
     private String senderId;
-    private String receiverId;
     private String roomNo;
     private long userCount;
     @DateTimeFormat(pattern = "yyyy/MM/dd'T'HH:mm:ss")

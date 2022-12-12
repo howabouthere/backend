@@ -30,10 +30,9 @@ class ChatControllerTest {
                 .id(10L)
                 .roomNo("d9caae20-5172-44ca-8662-a7064738e300")
                 .senderId("admin")
-                .receiverId("park")
                 .dateTime(LocalDateTime.now())
                 .text("here")
-                .type(Chat.MessageType.SEND)
+                .type(Chat.MessageType.TALK)
                 .userCount(1L)
                 .build();
 
