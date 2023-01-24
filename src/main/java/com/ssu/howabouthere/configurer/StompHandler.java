@@ -3,8 +3,10 @@ package com.ssu.howabouthere.configurer;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.ChatService;
 import com.ssu.howabouthere.service.impl.ChatRoomServiceImpl;
-import com.ssu.howabouthere.vo.Chat;
-import lombok.RequiredArgsConstructor;
+import com.ssu.howabouthere.vo.ChatMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -16,36 +18,45 @@ import java.security.Principal;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
-    private JwtTokenProvider jwtTokenProvider;
-    private ChatService chatService;
-    private ChatRoomServiceImpl chatRoomService;
-    private Chat chat;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final ChatService chatService;
+    private final ChatRoomServiceImpl chatRoomService;
+
+    private final Logger logger = LoggerFactory.getLogger(StompHandler.class);
+
+    @Autowired
+    public StompHandler(JwtTokenProvider jwtTokenProvider, ChatService chatService, ChatRoomServiceImpl chatRoomService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.chatRoomService = chatRoomService;
+        this.chatService = chatService;
+    }
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if(StompCommand.CONNECT == accessor.getCommand()) {
             String jwtToken = accessor.getFirstNativeHeader("token");
+            logger.info("connect {}", jwtToken);
             jwtTokenProvider.validateToken(jwtToken);
         } else if(StompCommand.SUBSCRIBE == accessor.getCommand()) {
             String roomNo = chatService.findChatRoomNo(Optional.ofNullable(
-                    (String)message.getHeaders().get("destination")).orElse("InvalidRoomNo"));
-            String sessionId = (String) message.getHeaders().get("sessionId");
+                    (String)message.getHeaders().get("simpDestination")).orElse("InvalidRoomNo"));
+            String sessionId = (String) message.getHeaders().get("simpSessionId");
+
             chatRoomService.setUserEnterInfo(sessionId, roomNo);
             chatRoomService.plusUserCount(roomNo);
-            String userId = Optional.ofNullable((Principal)message.getHeaders().get("user"))
-                    .map(Principal::getName).orElse("unknown");
-            chatService.sendChat(Chat.builder().type(Chat.MessageType.ENTER).roomNo(roomNo).senderId(userId).build());
+
+            chatService.sendChat(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomNo(roomNo).build());
         } else if(StompCommand.DISCONNECT == accessor.getCommand()) {
-            String sessionId = (String) message.getHeaders().get("sessionId");
+            String sessionId = (String) message.getHeaders().get("simpSessionId");
             String roomNo = chatRoomService.getUserEnterRoomNo(sessionId);
+
             chatRoomService.minusUserCount(roomNo);
-            String userId = Optional.ofNullable((Principal) message.getHeaders().get("user")).map(Principal::getName).orElse("UnknownUser");
-            chatService.sendChat(Chat.builder().type(Chat.MessageType.QUIT).roomNo(roomNo).senderId(userId).build());
+
+            chatService.sendChat(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomNo(roomNo).build());
             chatRoomService.deleteUserEnterInfo(sessionId);
         }
-        return ChannelInterceptor.super.preSend(message, channel);
+        return message;
     }
 }

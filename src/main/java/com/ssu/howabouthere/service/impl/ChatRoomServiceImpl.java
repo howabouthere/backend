@@ -1,27 +1,40 @@
 package com.ssu.howabouthere.service.impl;
 
 import com.ssu.howabouthere.vo.ChatRoom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("chatRoomService")
 public class ChatRoomServiceImpl {
     private static final String CHAT_ROOM = "CHAT_ROOM";
     public static final String USER_COUNT = "USER_COUNT";
     public static final String ENTER_INFO = "ENTER_INFO";
 
-    @Resource(name = "redisTemplate")
+    private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, ChatRoom> chatRoomHashOperations;
-    @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> enterInfoHashOperations;
-    @Resource(name = "redisTemplate")
-    private ValueOperations<String, String> userCountValueOperations;
+    private ValueOperations<String, Object> userCountValueOperations;
+
+    @Autowired
+    public ChatRoomServiceImpl(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    @PostConstruct
+    private void init() {
+        chatRoomHashOperations = this.redisTemplate.opsForHash();
+        enterInfoHashOperations = this.redisTemplate.opsForHash();
+        userCountValueOperations = this.redisTemplate.opsForValue();
+    }
 
     public List<ChatRoom> findAllRoom() {
         return chatRoomHashOperations.values(CHAT_ROOM);
@@ -51,7 +64,7 @@ public class ChatRoomServiceImpl {
 
     public long getUserCount(String roomNo) {
         String roomValue = USER_COUNT + "_" + roomNo;
-        return Long.parseLong(Optional.ofNullable(
+        return Long.parseLong((String) Optional.ofNullable(
                 userCountValueOperations.get(roomValue)).orElse("0"));
     }
 

@@ -2,18 +2,15 @@ package com.ssu.howabouthere.controller;
 
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.impl.ChatRoomServiceImpl;
-import com.ssu.howabouthere.vo.Chat;
-import org.junit.jupiter.api.AfterAll;
+import com.ssu.howabouthere.vo.ChatMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class ChatControllerTest {
+class ChatMessageControllerTest {
 
     @Autowired
     private ChatController controller;
@@ -26,13 +23,12 @@ class ChatControllerTest {
     @Test
     void 테스트() {
         //given
-        Chat givenChat = Chat.builder()
+        ChatMessage givenChatMessage = ChatMessage.builder()
                 .id(10L)
                 .roomNo("d9caae20-5172-44ca-8662-a7064738e300")
                 .senderId("admin")
-                .dateTime(LocalDateTime.now())
                 .text("here")
-                .type(Chat.MessageType.TALK)
+                .type(ChatMessage.MessageType.TALK)
                 .userCount(1L)
                 .build();
 

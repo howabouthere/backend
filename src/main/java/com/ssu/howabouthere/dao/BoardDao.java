@@ -5,6 +5,7 @@ import com.ssu.howabouthere.vo.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class BoardDao {
     }
 
     public void uploadArticle(Board board) {
+        board.setPublishedDate(LocalDateTime.now());
         boardMapper.insertArticle(board);
     }
 

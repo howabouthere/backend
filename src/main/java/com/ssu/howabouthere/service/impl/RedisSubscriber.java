@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-@Service("redisSubscriber")
+@Service
 @RequiredArgsConstructor
-public class RedisSubscriberService {
+public class RedisSubscriber {
     private final ObjectMapper objectMapper;
     private final SimpMessageSendingOperations messagingTemplate;
 

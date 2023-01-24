@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Builder
-public class Chat implements Serializable {
+public class ChatMessage implements Serializable {
     public enum MessageType {
         ENTER, TALK, QUIT
     }
@@ -26,6 +26,4 @@ public class Chat implements Serializable {
     private String senderId;
     private String roomNo;
     private long userCount;
-    @DateTimeFormat(pattern = "yyyy/MM/dd'T'HH:mm:ss")
-    private LocalDateTime dateTime;
 }

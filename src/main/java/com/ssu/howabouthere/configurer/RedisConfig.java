@@ -1,6 +1,6 @@
 package com.ssu.howabouthere.configurer;
 
-import com.ssu.howabouthere.service.impl.RedisSubscriberService;
+import com.ssu.howabouthere.service.impl.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriberService subscriber) {
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 

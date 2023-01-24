@@ -78,7 +78,17 @@ public class BoardController {
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
     @PostMapping("/getArticlesByUserId")
-    public List<Board> getArticleByUserId(@RequestBody Board board, HttpServletRequest request) throws Exception {
-        return boardService.getArticlesByUsername(board);
+    public List<Board> getArticleByUserId(@RequestBody String userId, HttpServletRequest request) throws Exception {
+        return boardService.getArticlesByUsername(userId);
+    }
+
+    @ApiOperation(value = "getAllArticles", notes = "모든 게시글 가져오기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "관리자에게 문의")
+    })
+    @GetMapping("/getAllArticles")
+    public List<Board> getAllArticles(HttpServletRequest request) throws Exception {
+        return boardService.getAllUploadedArticles();
     }
 }

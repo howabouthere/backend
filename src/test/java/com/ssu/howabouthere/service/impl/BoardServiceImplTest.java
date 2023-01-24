@@ -36,7 +36,7 @@ class BoardServiceImplTest {
     void 게시물_올리기() {
         // given
         Board givenArticle = new Board(1L, "hello", "test", "admin", 126.9038D,
-                37.5174D, "서울특별시", "영등포구", "영등포동", "");
+                37.5174D, "서울특별시", "영등포구", "영등포동", "", LocalDateTime.now());
 
         /*
         // when
@@ -56,7 +56,8 @@ class BoardServiceImplTest {
     void 게시물_찾기() {
         // given
         Board givenArticle = new Board(1L, "hello", "test", "admin", 126.9038D,
-                37.5174D, "서울특별시", "영등포구", "영등포동", "");
+                37.5174D, "서울특별시", "영등포구", "영등포동", "",
+                LocalDateTime.now());
 
         /*
         // when

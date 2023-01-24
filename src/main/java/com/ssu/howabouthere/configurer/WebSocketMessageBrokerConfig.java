@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfigurer {
-    private StompHandler stompHandler;
+    private final StompHandler stompHandler;
 
     public WebSocketMessageBrokerConfig(@Autowired StompHandler stompHandler) {
         this.stompHandler = stompHandler;
@@ -19,7 +19,8 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws-stomp").setAllowedOrigins("http://localhost:3000")
+                .setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override

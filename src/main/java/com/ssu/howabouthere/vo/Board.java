@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,10 +20,10 @@ public class Board {
     @NonNull
     private String title;
     // UTF8MB4
-    private String text;
+    private String contents;
     @NonNull
     @Size(max = 20)
-    private String username;
+    private String name;
     @NonNull
     private Double longitude;
     @NonNull
@@ -33,4 +33,7 @@ public class Board {
     private String region_2nd_name;
     private String region_3rd_name;
     private String region_4th_name;
+
+    @NonNull
+    private LocalDateTime publishedDate;
 }

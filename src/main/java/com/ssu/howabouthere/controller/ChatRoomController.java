@@ -1,9 +1,11 @@
 package com.ssu.howabouthere.controller;
 
+import com.ssu.howabouthere.constants.SessionConstants;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.impl.ChatRoomServiceImpl;
 import com.ssu.howabouthere.vo.ChatRoom;
 import com.ssu.howabouthere.vo.ChatRoomUserInfo;
+import com.ssu.howabouthere.vo.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -13,7 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -27,16 +33,19 @@ public class ChatRoomController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @ApiOperation(value = "/chat/createRoom", notes = "채팅방 만들기")
+    @ApiOperation(value = "/api/chat/createRoom", notes = "채팅방 만들기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
     @PostMapping("/createRoom")
-    public void createRoom(@RequestParam String name, Model model) {
+    public @ResponseBody
+    Map<String, Object> createRoom(@RequestBody String name) {
+        Map<String, Object> resultMap = new HashMap<>();
         ChatRoom chatRoom = chatRoomService.createChatRoom(name);
-        model.addAttribute("chatRoom", chatRoom);
-        model.addAttribute("success", true);
+        resultMap.put("chatRoom", chatRoom);
+        resultMap.put("success", true);
+        return resultMap;
     }
 
     @GetMapping("/rooms")
@@ -47,7 +56,7 @@ public class ChatRoomController {
         return chatRooms;
     }
 
-    @ApiOperation(value = "/chat/room/enter/{roomNo}", notes = "해당 채팅방의 번호 가져오기")
+    @ApiOperation(value = "/api/chat/room/enter/{roomNo}", notes = "해당 채팅방의 번호 가져오기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
@@ -57,7 +66,7 @@ public class ChatRoomController {
         return roomNo;
     }
 
-    @ApiOperation(value = "/chat/room/{roomNo}", notes = "채팅방의 정보 가져오기")
+    @ApiOperation(value = "/api/chat/room/{roomNo}", notes = "채팅방의 정보 가져오기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
@@ -67,15 +76,16 @@ public class ChatRoomController {
         return chatRoomService.findRoomByRoomNo(roomNo);
     }
 
-    @ApiOperation(value = "/user", notes = "채팅방의 정보 가져오기")
+    @ApiOperation(value = "/api/chat/user", notes = "채팅방의 정보 가져오기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
     @GetMapping("/user")
-    public ChatRoomUserInfo getUserInfo() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
+    public ChatRoomUserInfo getUserInfo(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(SessionConstants.LOGIN_MEMBER);
+        String username = user.getName();
         return ChatRoomUserInfo.builder().username(username).token(jwtTokenProvider.generateToken(username)).build();
     }
 }

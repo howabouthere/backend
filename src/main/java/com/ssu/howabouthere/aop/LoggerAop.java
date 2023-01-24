@@ -1,12 +1,11 @@
 package com.ssu.howabouthere.aop;
 
 import com.ssu.howabouthere.vo.Board;
+import com.ssu.howabouthere.vo.ChatMessage;
 import com.ssu.howabouthere.vo.User;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,6 +26,13 @@ public class LoggerAop {
     @Pointcut(value = "execution(* com.ssu.howabouthere.controller.BoardController.*(..)) && args(board, request)", argNames = "board, request")
     private void boardExecution(Board board, HttpServletRequest request) {}
 
+    @Pointcut(value = "execution(* com.ssu.howabouthere.helper.KakaoMapHelper.getDivisionByAxis(..)) && args(longitude, latitude)",
+            argNames = "longitude,latitude")
+    private void kakaoApiExecution(Double longitude, Double latitude) {}
+
+    @Pointcut(value = "execution(* com.ssu.howabouthere.controller.ChatController.message(..)) && args(chatMessage, token))")
+    private void sendMessageExecution(ChatMessage chatMessage, String token) {}
+
     @Before(value = "loginExecution(loginUser, request)", argNames = "jp,loginUser,request")
     public void loginAroundAdvisor(JoinPoint jp, User loginUser, HttpServletRequest request) {
         logger.info("login user info : " + loginUser.toString());
@@ -42,4 +48,20 @@ public class LoggerAop {
         logger.info("in method: " + jp.getSignature().getName());
         logger.info("board article info: " + board.toString());
     }
+
+    @Before(value = "kakaoApiExecution(longitude, latitude)", argNames = "jp,longitude,latitude")
+    public void kakaoApiExecutionAdvisor(JoinPoint jp, Double longitude, Double latitude) {
+        logger.info("in method: " + jp.getSignature().getName());
+        logger.info("longitude: " + longitude + " and latitude: " + latitude);
+    }
+/*
+    @Around(value = "sendMessageExecution(chatMessage, token)", argNames = "pjp, chatMessage, token")
+    public Object sendMessageAroundAdvisor(ProceedingJoinPoint pjp, ChatMessage chatMessage, String token) throws Throwable {
+        logger.info(chatMessage.toString());
+        logger.info("token : " + token);
+
+        Object retVal = pjp.proceed();
+
+        return retVal;
+    }*/
 }

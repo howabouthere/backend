@@ -13,5 +13,5 @@ public interface BoardService {
     void deleteArticle(Board board);
     void editArticle(Board board);
     List<Board> getAroundLocationArticles(Map<String, Object> axisInfo) throws Exception;
-    List<Board> getArticlesByUsername(Board board);
+    List<Board> getArticlesByUsername(String userId);
 }

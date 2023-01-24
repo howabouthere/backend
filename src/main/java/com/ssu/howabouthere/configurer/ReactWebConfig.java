@@ -8,8 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ReactWebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/howabouthere/**")
+        registry.addMapping("/**")
                 .allowCredentials(true)
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("OPTIONS", "GET", "POST", "PUT", "DELETE");
     }
 }
