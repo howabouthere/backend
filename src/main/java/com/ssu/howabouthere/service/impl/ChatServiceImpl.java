@@ -1,18 +1,11 @@
 package com.ssu.howabouthere.service.impl;
 
-import com.ssu.howabouthere.constants.SessionConstants;
 import com.ssu.howabouthere.service.ChatService;
 import com.ssu.howabouthere.vo.ChatMessage;
-import com.ssu.howabouthere.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Service(value = "chatService")
 public class ChatServiceImpl implements ChatService {

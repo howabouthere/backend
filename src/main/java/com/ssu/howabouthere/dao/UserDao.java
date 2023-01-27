@@ -27,12 +27,17 @@ public class UserDao {
         return userMapper.selectMemberByEmail(email);
     }
 
-    public boolean login(String email, String password) {
+    public User login(String email, String password) {
         User loginUser = userMapper.selectMemberByEmail(email);
 
-        if(loginUser != null)
-            return passwordEncoder.matches(password, loginUser.getPassword());
-        else return false;
+        if(loginUser != null) {
+            boolean isPasswordMatched = passwordEncoder.matches(password, loginUser.getPassword());
+            if(isPasswordMatched) {
+                return loginUser;
+            }
+        }
+
+        return null;
     }
 
 

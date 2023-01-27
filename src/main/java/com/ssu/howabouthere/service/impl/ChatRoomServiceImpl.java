@@ -1,5 +1,6 @@
 package com.ssu.howabouthere.service.impl;
 
+import com.ssu.howabouthere.dao.RedisDao;
 import com.ssu.howabouthere.vo.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,69 +15,52 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("chatRoomService")
+@RequiredArgsConstructor
 public class ChatRoomServiceImpl {
     private static final String CHAT_ROOM = "CHAT_ROOM";
     public static final String USER_COUNT = "USER_COUNT";
     public static final String ENTER_INFO = "ENTER_INFO";
 
-    private final RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, ChatRoom> chatRoomHashOperations;
-    private HashOperations<String, String, String> enterInfoHashOperations;
-    private ValueOperations<String, Object> userCountValueOperations;
-
-    @Autowired
-    public ChatRoomServiceImpl(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
-
-    @PostConstruct
-    private void init() {
-        chatRoomHashOperations = this.redisTemplate.opsForHash();
-        enterInfoHashOperations = this.redisTemplate.opsForHash();
-        userCountValueOperations = this.redisTemplate.opsForValue();
-    }
+    private RedisDao redisDao;
 
     public List<ChatRoom> findAllRoom() {
-        return chatRoomHashOperations.values(CHAT_ROOM);
+        return redisDao.getChatRooms(CHAT_ROOM);
     }
 
     public ChatRoom findRoomByRoomNo(String roomNo) {
-        return chatRoomHashOperations.get(CHAT_ROOM, roomNo);
+        return redisDao.getChatRoomByRoomNo(CHAT_ROOM, roomNo);
     }
 
     public ChatRoom createChatRoom(String title) {
         ChatRoom chatRoom = ChatRoom.create(title);
-        chatRoomHashOperations.put(CHAT_ROOM, chatRoom.getRoomNo(), chatRoom);
+        redisDao.setChatRoomInfo(CHAT_ROOM, chatRoom.getRoomNo(), chatRoom);
         return chatRoom;
     }
 
     public void setUserEnterInfo(String sessionId, String roomNo) {
-        enterInfoHashOperations.put(ENTER_INFO, sessionId, roomNo);
+        redisDao.setEnterInfo(ENTER_INFO, sessionId, roomNo);
     }
 
     public String getUserEnterRoomNo(String sessionId) {
-        return enterInfoHashOperations.get(ENTER_INFO, sessionId);
+        return redisDao.getEnterRoomNo(ENTER_INFO, sessionId);
     }
 
     public void deleteUserEnterInfo(String sessionId) {
-        enterInfoHashOperations.delete(ENTER_INFO, sessionId);
+        redisDao.deleteEnterInfo(ENTER_INFO, sessionId);
     }
 
     public long getUserCount(String roomNo) {
         String roomValue = USER_COUNT + "_" + roomNo;
-        return Long.parseLong((String) Optional.ofNullable(
-                userCountValueOperations.get(roomValue)).orElse("0"));
+        return redisDao.getUserCount(roomValue).orElse(0L);
     }
 
     public long plusUserCount(String roomNo) {
         String roomValue = USER_COUNT + "_" + roomNo;
-        return Optional.ofNullable(
-                userCountValueOperations.increment(roomValue)).orElse(0L);
+        return redisDao.plusUserCount(roomValue).orElse(0L);
     }
 
     public long minusUserCount(String roomNo) {
         String roomValue = USER_COUNT + "_" + roomNo;
-        return Optional.ofNullable(
-                userCountValueOperations.decrement(roomValue)).orElse(0L);
+        return redisDao.minusUserCount(roomValue).orElse(0L);
     }
 }

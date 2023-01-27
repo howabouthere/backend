@@ -3,13 +3,16 @@ package com.ssu.howabouthere.service.impl;
 import com.ssu.howabouthere.dao.UserDao;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.UserService;
+import com.ssu.howabouthere.vo.Authority;
 import com.ssu.howabouthere.vo.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 import java.time.LocalDateTime;
 
@@ -23,14 +26,16 @@ class UserServiceImplTest {
     @Mock
     private UserDao userDao;
 
+    @Mock
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
     private UserService userService;
 
-    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr");
-
-    @BeforeEach
-    void mock_주입() {
-        this.userService = new UserServiceImpl(userDao);
-    }
+    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr", Authority.ROLE_ADMIN);
 
     @Test
     void 회원가입() {
@@ -55,10 +60,10 @@ class UserServiceImplTest {
 
         // when
         userService.login(email, password);
-        when(userDao.login(email, password)).thenReturn(true);
+        when(userDao.login(email, password));
 
         // then
-        assertTrue(userService.login(email, password));
+        userService.login(email, password);
         verify(userDao, times(2)).login(email, password);
         verifyNoMoreInteractions(userDao);
     }

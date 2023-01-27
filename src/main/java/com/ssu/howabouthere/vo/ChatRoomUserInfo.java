@@ -1,5 +1,6 @@
 package com.ssu.howabouthere.vo;
 
+import com.ssu.howabouthere.dto.Token;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,5 +8,5 @@ import lombok.Data;
 @Data
 public class ChatRoomUserInfo {
     private String username;
-    private String token;
+    private Token accessToken;
 }

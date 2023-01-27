@@ -1,6 +1,6 @@
 package com.ssu.howabouthere.controller;
 
-import com.ssu.howabouthere.constants.SessionConstants;
+import com.ssu.howabouthere.constants.Constants;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.impl.ChatRoomServiceImpl;
 import com.ssu.howabouthere.vo.ChatRoom;
@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,8 +81,9 @@ public class ChatRoomController {
     @GetMapping("/user")
     public ChatRoomUserInfo getUserInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SessionConstants.LOGIN_MEMBER);
-        String username = user.getName();
-        return ChatRoomUserInfo.builder().username(username).token(jwtTokenProvider.generateToken(username)).build();
+        User user = (User) session.getAttribute(Constants.LOGIN_MEMBER);
+        return ChatRoomUserInfo.builder().username(user.getName())
+                .accessToken(jwtTokenProvider.generateToken(user.toAuthentication()))
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package com.ssu.howabouthere.controller;
 
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.UserService;
+import com.ssu.howabouthere.vo.Authority;
 import com.ssu.howabouthere.vo.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class UserControllerTest {
 
     private JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
 
-    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr");
+    private User givenUser = new User(1L, "1234", LocalDateTime.now(), "park", "admin@ssu.ac.kr", Authority.ROLE_ADMIN);
 
     @BeforeEach
     void mock_init() {
@@ -45,7 +46,7 @@ class UserControllerTest {
 
         // when
         userController.login(givenUser, request);
-        lenient().when(userService.login("admin", "1234")).thenReturn(true);
+        lenient().when(userService.login("admin", "1234"));
 
         // then
         verify(userService, times(1)).login("admin", "1234");

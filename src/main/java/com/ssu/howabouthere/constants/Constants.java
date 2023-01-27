@@ -1,6 +1,7 @@
 package com.ssu.howabouthere.constants;
 
-public interface SessionConstants {
+public interface Constants {
     String LOGIN_MEMBER = "loginMember";
     String JWT_TOKEN = "jwtToken";
+    String REFRESH_TOKEN = "refreshToken";
 }
