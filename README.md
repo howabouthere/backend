@@ -38,6 +38,21 @@ MyBatis를 사용해서 JDBC를 통해 DB에 액세스하는 작업을 캡슐화
 ### JWT
 JWT를 사용하여 로그인을 구현하였다.
 
+<pre>
+<code>
+{
+    "loginSuccess": true,
+    "token": {
+        "grantType": "Bearer",
+        "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNyIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2NzUwOTgzMjh9.PA96DnZcVzWX71SVaHMgd8CO2YYckR3fTw_znZI9lKdpd5vRAknnA350Doif1ZsLZ78dZRnDg739FYERT4TJGg",
+        "accessTokenExpiresTime": 1675098328418,
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2NzU2OTk1Mjh9.1gXP0_wEag_brzwqtbeYz3ldTjrqI6zsaizpZcMjfjZRBsldnXIXIMI-xUzDpfO-dxuApOznwvln1oXbukmpOg",
+        "key": null
+    }
+}
+</code>
+</pre>
+
 ***
 
 ## 기타 기술
