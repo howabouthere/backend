@@ -3,6 +3,7 @@ package com.ssu.howabouthere.service.impl;
 import com.ssu.howabouthere.dao.BoardDao;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.BoardService;
+import com.ssu.howabouthere.vo.Authority;
 import com.ssu.howabouthere.vo.Board;
 import com.ssu.howabouthere.vo.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ class BoardServiceImplTest {
 
     private BoardService boardService;
 
-    private final User user = new User(1L, "1234", LocalDateTime.now(), "park", "admin@hello.com");
+    private final User user = new User(1L, "1234", LocalDateTime.now(), "park", "admin@hello.com", Authority.ROLE_ADMIN);
 
     @BeforeEach
     void init() {

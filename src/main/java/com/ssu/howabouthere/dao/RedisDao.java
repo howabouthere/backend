@@ -1,6 +1,7 @@
 package com.ssu.howabouthere.dao;
 
 import com.ssu.howabouthere.dto.RefreshToken;
+import com.ssu.howabouthere.vo.ChatMessage;
 import com.ssu.howabouthere.vo.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -84,5 +85,9 @@ public class RedisDao {
 
     public Optional<RefreshToken> find(String key, String principalName) {
         return Optional.ofNullable((RefreshToken) redisTemplate.opsForHash().get(key, principalName));
+    }
+
+    public void convertAndSend(String topic, ChatMessage chatMessage) {
+        redisTemplate.convertAndSend(topic, chatMessage);
     }
 }

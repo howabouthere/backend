@@ -1,33 +1,38 @@
 package com.ssu.howabouthere.configurer;
 
-import com.ssu.howabouthere.helper.JwtAccessDeniedHandler;
-import com.ssu.howabouthere.helper.JwtAuthenticationEntryPoint;
+import com.ssu.howabouthere.helper.jwt.JwtAccessDeniedHandler;
+import com.ssu.howabouthere.helper.jwt.JwtAuthenticationEntryPoint;
 import com.ssu.howabouthere.helper.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
 @EnableWebSecurity
 @PropertySource(value = "classpath:application.properties")
 @RequiredArgsConstructor
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig {
     @Value("${password.salt}")
     private static String SALT = "haruharu";
 
@@ -41,9 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
                 /* csrf를 해제함 */
                 .csrf().disable()
                 .exceptionHandling()
@@ -68,21 +73,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("*").permitAll()
                 /* JwtSecurityConfig를 추가한다. */
                 .and()
-                .apply(new JwtSecurityConfig(jwtTokenProvider));
+                .apply(new JwtSecurityConfig(jwtTokenProvider))
+                .and().build();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-        web.httpFirewall(allowUrlEncodedSlashHttpFireWall());
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}password").roles("USER")
-                .and()
-                .withUser("admin").password("{noop}password").roles("ADMIN");
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.httpFirewall(allowUrlEncodedSlashHttpFireWall());
     }
 
     @Bean

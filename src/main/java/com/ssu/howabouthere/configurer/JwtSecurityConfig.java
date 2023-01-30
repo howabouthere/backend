@@ -1,6 +1,7 @@
 package com.ssu.howabouthere.configurer;
 
 import com.ssu.howabouthere.helper.JwtTokenProvider;
+import com.ssu.howabouthere.helper.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

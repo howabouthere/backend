@@ -9,6 +9,7 @@ import com.ssu.howabouthere.helper.JwtTokenProvider;
 import com.ssu.howabouthere.service.UserService;
 import com.ssu.howabouthere.vo.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -17,14 +18,21 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
     private UserDao userDao;
     private AuthenticationManagerBuilder authenticationManagerBuilder;
     private JwtTokenProvider jwtTokenProvider;
-
     private RedisDao redisDao;
+
+    @Autowired
+    public UserServiceImpl(UserDao userDao, AuthenticationManagerBuilder authenticationManagerBuilder,
+                           JwtTokenProvider jwtTokenProvider, RedisDao redisDao) {
+        this.userDao = userDao;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.redisDao = redisDao;
+    }
 
     @Override
     public void register(User user) {
@@ -41,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public Token login(String email, String password) {
         User user = userDao.login(email, password);
         if(user != null) {
-            UsernamePasswordAuthenticationToken authenticationToken = user.toAuthentication();
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 

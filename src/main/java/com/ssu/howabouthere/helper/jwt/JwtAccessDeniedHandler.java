@@ -1,4 +1,4 @@
-package com.ssu.howabouthere.helper;
+package com.ssu.howabouthere.helper.jwt;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

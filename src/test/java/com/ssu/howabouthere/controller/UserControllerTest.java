@@ -45,7 +45,7 @@ class UserControllerTest {
         // given
 
         // when
-        userController.login(givenUser, request);
+        userController.login(givenUser);
         lenient().when(userService.login("admin", "1234"));
 
         // then

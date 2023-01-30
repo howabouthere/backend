@@ -33,7 +33,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "관리자에게 문의")
     })
     @PostMapping("/login")
-    public @ResponseBody Map<String, Object> login(@RequestBody @Valid User loginInfo, HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> login(@RequestBody @Valid User loginInfo) {
         String email = loginInfo.getEmail();
         String password = loginInfo.getPassword();
         Map<String, Object> resultMap = new HashMap<>();

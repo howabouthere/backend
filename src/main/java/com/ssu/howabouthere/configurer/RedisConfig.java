@@ -24,6 +24,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Value("${spring.redis.port}")
     private static int REDIS_PORT;
+    @Value("${spring.redis.host}")
+    private static String REDIS_HOST;
 
     @Bean
     public ChannelTopic channelTopic() {
@@ -36,7 +38,7 @@ public class RedisConfig {
                 .readFrom(ReadFrom.REPLICA_PREFERRED)
                 .build();
 
-        RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration("server", REDIS_PORT);
+        RedisStandaloneConfiguration serverConfig = new RedisStandaloneConfiguration("127.0.0.1", 6379);
 
         return new LettuceConnectionFactory(serverConfig, clientConfiguration);
     }

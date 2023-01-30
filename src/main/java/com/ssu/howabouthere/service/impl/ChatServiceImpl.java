@@ -1,24 +1,21 @@
 package com.ssu.howabouthere.service.impl;
 
+import com.ssu.howabouthere.dao.RedisDao;
 import com.ssu.howabouthere.service.ChatService;
 import com.ssu.howabouthere.vo.ChatMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service(value = "chatService")
 public class ChatServiceImpl implements ChatService {
     private final ChannelTopic channelTopic;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ChatRoomServiceImpl chatRoomService;
 
-    @Autowired
-    public ChatServiceImpl(ChannelTopic channelTopic, RedisTemplate<String, Object> redisTemplate, ChatRoomServiceImpl chatRoomService) {
-        this.channelTopic = channelTopic;
-        this.redisTemplate = redisTemplate;
-        this.chatRoomService = chatRoomService;
-    }
+    private final RedisDao redisDao;
+    private final ChatRoomServiceImpl chatRoomService;
 
     public String findChatRoomNo(String destination) {
         int lastIndex = destination.lastIndexOf('/');
@@ -39,6 +36,6 @@ public class ChatServiceImpl implements ChatService {
             chatMessage.setSenderId("[알림]");
         }
 
-        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+        redisDao.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
 }
